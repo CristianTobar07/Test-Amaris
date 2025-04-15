@@ -78,6 +78,16 @@ const FundSelector = () => {
       }
     }
 
+    if (dataUser) {
+      if (dataUser.balance < submissionData.amont) {
+        toast.error(
+          "No tiene saldo disponible para vincularse al fondo " +
+            submissionData.category_name
+        );
+        return;
+      }
+    }
+
     const res = await dispatch(openInvestment(submissionData));
     if (res.status) {
       dispatch(getDataUser());
