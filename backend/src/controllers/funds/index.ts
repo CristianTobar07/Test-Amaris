@@ -22,7 +22,6 @@ export const getOpenFunds = async (
 ) => {
   try {
     const data = await fundsModel.find({ state: 1 });
-    console.log({data});
     res.status(200).json({ data: data, status: true });
   } catch (err) {
     next(err);
@@ -46,12 +45,13 @@ export const create = async (
     }
 
     return res.status(201).json({
-      message: "Fondo creado exitosamente",
+      msg: "Fondo creado exitosamente",
+      status: true,
       data: fund,
     });
   } catch (error) {
     next(error);
-    return res.status(500).json({ message: "Error interno del servidor" });
+    return res.status(500).json({ msg: "Error interno del servidor" });
   }
 };
 
@@ -62,6 +62,7 @@ export const updateStateFund = async (
 ) => {
   try {
     const body = req.body;
+    const user = await userModel.findById(body.id_user);
     const data = await fundsModel.findByIdAndUpdate(body.id_fund, {
       state: body.state,
     });
@@ -69,6 +70,10 @@ export const updateStateFund = async (
     if (data === null) {
       res.status(404).json({ msg: "Fondo no existe" });
     } else {
+      if (user) {
+        user.balance += +data.amont;
+        await user.save();
+      }
       res
         .status(201)
         .json({ msg: "Estado cancelado exitosamente", status: true });

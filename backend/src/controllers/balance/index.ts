@@ -18,7 +18,7 @@ export const updateBalance = async (
       balance: body.balance,
     });
     if (dataUser) {
-      return res.status(404).json({ message: "Monto Actualizado" });
+      return res.status(404).json({ msg: "Monto Actualizado" });
     }
     const balance = req.body;
     await balanceModel.create(balance);

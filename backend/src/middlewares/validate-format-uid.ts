@@ -10,7 +10,7 @@ export const validateObjectIds = (fields: string[]) => {
       if (id && !mongoose.isValidObjectId(id)) {
         return res
           .status(400)
-          .json({ message: `Formato inválido del Id en campo: ${field}` });
+          .json({ msg: `Formato inválido del Id en campo: ${field}` });
       }
     }
     next();

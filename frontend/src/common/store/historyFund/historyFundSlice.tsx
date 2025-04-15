@@ -1,29 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../../store";
 import { displayLoader, removeProcess } from "../loading/loadingSlice";
-import * as Api from "../../../api/header";
-import { DataUser, ResponseDataUser } from "../../../interfaces/header";
+import * as Api from "../../../api/historyFund";
+import {
+  CurrentFund,
+  ResponseCurrentFunds,
+} from "../../../interfaces/currentFunds";
 
 interface UserState {
   isReloadNeeded: boolean;
-  dataUser?: DataUser;
+  historyFunds: CurrentFund[];
 }
 
 const initialState: UserState = {
   isReloadNeeded: true,
-  dataUser: undefined,
+  historyFunds: [],
 };
 
 const slice = createSlice({
-  name: "user",
+  name: "historyFund",
   initialState,
   reducers: {
-    getDataUserInit: (state) => {
+    getHistoryFundInit: (state) => {
       state.isReloadNeeded = true;
     },
-    getDataUserSucess: (state, acton: PayloadAction<DataUser>) => {
+    getHistoryFundSucess: (state, acton: PayloadAction<CurrentFund[]>) => {
       state.isReloadNeeded = false;
-      state.dataUser = acton.payload;
+      state.historyFunds = acton.payload;
     },
   },
 });
@@ -31,12 +34,12 @@ const slice = createSlice({
 export const {} = slice.actions;
 export default slice.reducer;
 
-export const getDataUser = (): AppThunk => async (dispatch) => {
+export const getHistoryFunds = (): AppThunk => async (dispatch) => {
   const idProcess: string = dispatch(displayLoader());
-  dispatch(slice.actions.getDataUserInit());
+  dispatch(slice.actions.getHistoryFundInit());
   try {
-    const response: ResponseDataUser = await Api.getDataUser();
-    dispatch(slice.actions.getDataUserSucess(response.data));
+    const response: ResponseCurrentFunds = await Api.getHistoryFunds();
+    dispatch(slice.actions.getHistoryFundSucess(response.data));
     dispatch(removeProcess(idProcess));
     return response;
   } catch (error) {

@@ -9,7 +9,7 @@ export const getUser = async (
   try {
     const user: UserType | null = await userModel.findOne();
     if (!user) {
-      return res.status(404).json({ message: "No hay usuarios registrados" });
+      return res.status(404).json({ msg: "No hay usuarios registrados" });
     }
     res.status(200).json({ data: user, status: true });
   } catch (err) {
@@ -29,7 +29,7 @@ export const AddUser = async (
         uid: datauser.id,
         balance: req.body.balance,
       });
-      return res.status(404).json({ message: "Usuario Actualizado" });
+      return res.status(404).json({ msg: "Usuario Actualizado" });
     }
     const user = req.body;
     await userModel.create(user);

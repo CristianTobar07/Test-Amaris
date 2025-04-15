@@ -9,6 +9,13 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { useEffect } from "react";
+import { RootState } from "../../store";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../common/hooks/redux-hooks/reduxHooks";
+import { getHistoryFunds } from "../../common/store/historyFund/historyFundSlice";
 
 const data = [
   {
@@ -22,6 +29,20 @@ const data = [
 ];
 
 const TransactionHistory = () => {
+  const dispatch = useAppDispatch();
+
+  const { isReloadNeeded, historyFunds } = useAppSelector(
+    (state: RootState) => {
+      return state.historyFund;
+    }
+  );
+
+  useEffect(() => {
+    if (isReloadNeeded) {
+      dispatch(getHistoryFunds());
+    }
+  }, [isReloadNeeded, dispatch]);
+
   return (
     <Box p={4}>
       <Typography variant="h4" color="primary" mb={4}>
@@ -32,23 +53,21 @@ const TransactionHistory = () => {
         <Table>
           <TableHead sx={{ backgroundColor: "#e8f5e9" }}>
             <TableRow>
-              <TableCell>Transaction ID</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Fund</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Notification</TableCell>
+              <TableCell>ID</TableCell>
+              <TableCell>Categoría</TableCell>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Monto</TableCell>
+              <TableCell>Estado</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((tx) => (
-              <TableRow key={tx.id}>
-                <TableCell>{tx.id}</TableCell>
-                <TableCell>{tx.type}</TableCell>
-                <TableCell>{tx.fondo}</TableCell>
-                <TableCell>${tx.monto.toLocaleString()}</TableCell>
-                <TableCell>{tx.date}</TableCell>
-                <TableCell>{tx.notificacion}</TableCell>
+            {historyFunds.map((tx, index) => (
+              <TableRow key={tx.uid}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{tx.category}</TableCell>
+                <TableCell>{tx.category_name}</TableCell>
+                <TableCell>${tx.amont.toLocaleString()}</TableCell>
+                <TableCell>{tx.state === 1 ? "Abierto" : "Cerrado"}</TableCell>
               </TableRow>
             ))}
           </TableBody>
