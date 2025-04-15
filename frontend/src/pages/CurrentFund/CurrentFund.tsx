@@ -5,6 +5,8 @@ import {
   CardContent,
   Grid,
   Button,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   useAppDispatch,
@@ -16,19 +18,15 @@ import {
   getCurrentFunds,
   closeInvestment,
 } from "../../common/store/currentFund/currentFundSlice";
-import toast from "react-hot-toast";
 
 const CurrentFunds = () => {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { dataUser } = useAppSelector((state: RootState) => {
-    return state.header;
-  });
-
+  const { dataUser } = useAppSelector((state: RootState) => state.header);
   const { isReloadNeeded, currentFunds } = useAppSelector(
-    (state: RootState) => {
-      return state.currentFund;
-    }
+    (state: RootState) => state.currentFund
   );
 
   useEffect(() => {
@@ -44,9 +42,9 @@ const CurrentFunds = () => {
   };
 
   return (
-    <Box px={4}>
-      <Grid container mb={4}>
-        <div style={{ width: "100%" }}>
+    <Box px={2} py={3}>
+      <Grid container spacing={2} mb={4}>
+        <Grid item xs={12}>
           <Card elevation={2}>
             <CardContent
               sx={{
@@ -60,30 +58,32 @@ const CurrentFunds = () => {
                 Saldo:
               </Typography>
               <Typography variant="h5" color="secondary" fontWeight={600}>
-                $ {dataUser.balance}
+                $ {dataUser.balance.toLocaleString()}
               </Typography>
             </CardContent>
           </Card>
-        </div>
+        </Grid>
       </Grid>
 
       <Typography variant="h4" color="primary" mb={2}>
-        Fondos Actuales
+        Inversiones Activas
       </Typography>
 
       <Grid container spacing={3}>
         {currentFunds.map((fund, idx) => (
-          <div key={idx} style={{ width: "100%" }}>
+          <Grid item xs={12} sm={6} md={4} key={idx}>
             <Card
               elevation={2}
               sx={{
                 display: "flex",
+                flexDirection: isMobile ? "column" : "row",
                 justifyContent: "space-between",
-                alignItems: "center",
-                paddingRight: 2,
+                alignItems: isMobile ? "flex-start" : "center",
+                p: 2,
+                height: "100%",
               }}
             >
-              <CardContent>
+              <CardContent sx={{ flex: 1 }}>
                 <Typography variant="h6" fontWeight={600}>
                   {fund.category_name}
                 </Typography>
@@ -99,13 +99,14 @@ const CurrentFunds = () => {
                 sx={{
                   fontWeight: "bold",
                   fontSize: "1rem",
-                  height: "50%",
+                  mt: isMobile ? 2 : 0,
+                  alignSelf: isMobile ? "stretch" : "center",
                 }}
               >
                 Cancelar Inversión
               </Button>
             </Card>
-          </div>
+          </Grid>
         ))}
       </Grid>
     </Box>
