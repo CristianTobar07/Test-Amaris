@@ -9,6 +9,7 @@ import {
 } from "../../../interfaces/currentFunds";
 import toast from "react-hot-toast";
 import { getDataUser } from "../header/headerSlice";
+import { getHistoryFunds } from "../historyFund/historyFundSlice";
 
 interface UserState {
   isReloadNeeded: boolean;
@@ -71,6 +72,7 @@ export const closeInvestment =
       toast.success(response.msg);
       dispatch(slice.actions.closeInvestmentSucess(idFund));
       dispatch(getDataUser());
+      dispatch(getHistoryFunds());
       return response;
     } catch (error) {
       const message = "Error inesperado al cerrar la inversión";

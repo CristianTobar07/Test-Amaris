@@ -22,6 +22,7 @@ import { RootState } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { getCurrentFunds } from "../../common/store/currentFund/currentFundSlice";
 import { getDataUser } from "../../common/store/header/headerSlice";
+import { getHistoryFunds } from "../../common/store/historyFund/historyFundSlice";
 
 const FundSelector = () => {
   const dispatch = useAppDispatch();
@@ -81,6 +82,7 @@ const FundSelector = () => {
     if (res.status) {
       dispatch(getDataUser());
       dispatch(getCurrentFunds());
+      dispatch(getHistoryFunds());
       navigate("/fondo-actual");
     }
   };
@@ -96,7 +98,9 @@ const FundSelector = () => {
       maxWidth={500}
       mx="auto"
     >
-      <Typography variant="h6">Abrir fondo de inversión</Typography>
+      <Typography variant="h4" color="primary" mb={4}>
+        Abrir Fondo de Inversión
+      </Typography>
 
       {/* Selector de categoría */}
       <FormControl fullWidth>

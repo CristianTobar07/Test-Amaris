@@ -46,7 +46,7 @@ const TransactionHistory = () => {
   return (
     <Box p={4}>
       <Typography variant="h4" color="primary" mb={4}>
-        Transaction History
+        Historial de Transacciones
       </Typography>
 
       <TableContainer component={Paper}>
